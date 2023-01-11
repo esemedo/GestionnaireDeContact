@@ -1,0 +1,7 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+.idea
+contacts.csv
+out
+Project_Java_contact.iml
