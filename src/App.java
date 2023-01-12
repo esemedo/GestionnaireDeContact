@@ -27,7 +27,7 @@ public class App {
         String chercherparnom = "5 - Chercher par nom\n";
         String chercherparprenom = "6 - Chercher par prenom\n";
         String quitter = "Q - Quitter l'appli";
-        System.out.println(add + list + chercherparnom + modify + chercherparprenom + remove + quitter);
+        System.out.println(add + list +  modify + remove +chercherparnom + chercherparprenom +   quitter);
     }
     private static void _menu(){
         System.out.println("Choix de l'onglet : ");
@@ -70,7 +70,7 @@ public class App {
                 _menu();
             }
          }catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
 
@@ -138,7 +138,7 @@ public class App {
                 break;
         }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
 
@@ -171,7 +171,7 @@ public class App {
             //     System.out.println(contact.getLastname() + " " + contact.getFirstname());
             // }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
 
@@ -194,7 +194,7 @@ public class App {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
 
@@ -217,7 +217,7 @@ public class App {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
 
