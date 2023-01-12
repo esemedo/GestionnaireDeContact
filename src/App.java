@@ -5,8 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
-
+import java.util.Comparator;
 
 import model.Contact ;
 
@@ -72,25 +73,70 @@ public class App {
             System.out.println(e.getMessage());
         }
     }
+
     private static List triNom(ArrayList<Contact> list){
         List listNomPrenom = new ArrayList<>();
         for (Contact contact : list) {
             listNomPrenom.add(contact.getLastname() +" "+ contact.getFirstname() +" "+ contact.getMail() +" "+ contact.getTelephone() +" "+ contact.getBirthdate());
 
         }
+        Collections.sort(listNomPrenom);
         return listNomPrenom;
     }
+    public static Comparator<Contact> ComparatorByBirth = Comparator.comparing(Contact::getBirthdate);
+    public static Comparator<Contact> ComparatorByMail = new Comparator<Contact>() {
+        public int compare(Contact contact1, Contact contact2) {
+            return contact1.getMail().compareTo(contact2.getMail());
+        }
+    };
+
 
     private static void listContact()  {
-        // récupérer les contacts avec la méthode lister de la class contact
         try {
-            ArrayList<Contact> list = Contact.lister();
-            List listNomPrenom = triNom(list);
-            Collections.sort(listNomPrenom);
+        ArrayList<Contact> list = Contact.lister();
+        List<Contact> listContact = list;
+        System.out.println("1 - Tri par nom");
+        System.out.println("2 - Tri par date de naissance");
+        System.out.println("3 - Tri par mail");
+        System.out.println("4 - Sans tri");
 
-            for (Object ma : listNomPrenom) {
-                System.out.println(ma);
-            }
+        System.out.println("Choisissez une des options :");
+        String response = _scanner.nextLine();
+        switch (response){
+            case "1":
+                List contactList = triNom(list);
+                for (Object contact : contactList) {
+                    System.out.println(contact);
+                }
+                break;
+            case "2":
+                /*for (Contact contact : listContact) {
+                    //UsFormat.format(contact.getBirthdate() );
+                    Date d = UsFormat.parse(contact.getBirthdate());
+                    UsFormat.applyPattern("yyyy-MM-dd");
+                    String newDate = UsFormat.format(d);
+                    System.out.println(newDate);
+                    contact.setBirthdate(newDate);
+                }*/
+                Collections.sort(listContact, ComparatorByBirth);
+                for (Contact contact : listContact) {
+                    System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
+                }
+                break;
+            case "3":
+                Collections.sort(listContact, ComparatorByMail);
+                for (Contact contact : listContact) {System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
+                }
+                break;
+            case "4":
+                for (Contact contact : listContact) {
+                    System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
+                }
+                break;
+            default:
+                listContact();
+                break;
+        }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

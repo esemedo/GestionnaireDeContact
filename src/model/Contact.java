@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Contact implements Comparable{
+public class Contact implements Comparable {
     private String lastname;
     private String firstname;//prenom
     private String mail;
@@ -64,12 +64,12 @@ public class Contact implements Comparable{
     }
 
     public String getBirthdate() {
-        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         return f.format(birthdate);
     }
 
     public void setBirthdate(String birthdate) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         this.birthdate = format.parse(birthdate);
     }
 
@@ -180,4 +180,6 @@ public class Contact implements Comparable{
         int compareName = this.lastname.compareTo(contact.getLastname());
         return compareName !=0 ? compareName : this.firstname.compareTo(contact.getFirstname());
     }
+
+
 }
