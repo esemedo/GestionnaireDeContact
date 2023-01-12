@@ -66,7 +66,7 @@ public class App {
     private static List triNom(ArrayList<Contact> list){
         List listNomPrenom = new ArrayList<>();
         for (Contact contact : list) {
-            listNomPrenom.add(contact.getLastname() +" "+ contact.getFirstname());
+            listNomPrenom.add(contact.getLastname() +" "+ contact.getFirstname() +" "+ contact.getMail() +" "+ contact.getTelephone() +" "+ contact.getBirthdate());
 
         }
         return listNomPrenom;
