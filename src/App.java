@@ -48,7 +48,7 @@ public class App {
         String mail = _scanner.nextLine();
         try {
             ArrayList<Contact> list = Contact.lister();
-            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)))) {
+            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv")))) {
                 for (Contact contact : list) {
                     if (contact.getMail().equals(mail)) {
                         Contact contactModifier = Contact.modify(contact, mail);
@@ -59,9 +59,9 @@ public class App {
                     }
 
                 }
-                File realFile = new File("contacts.csv");
-                realFile.delete();
-                new File("contacts2.csv").renameTo(realFile);
+                // File realFile = new File("contacts.csv");
+                // realFile.delete();
+                // new File("contacts2.csv").renameTo(realFile);
 
             }if (!modify){
                 System.out.println("Contact inexitant\n");
