@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.*;
 import java.text.ParseException;
 import java.util.*;
@@ -17,9 +22,11 @@ public class App {
         String add = "1 - Ajouter contact\n";
         String list = "2 - Liste des contacts\n";
         String modify = "3 - Modifier un contact\n";
-        String delete = "4 - Supprimer un contact\n";
+        String remove = "4 - Supprimer un contact\n";
+        String chercherparnom = "5 - Chercher par nom\n";
+        String chercherparprenom = "6 - Chercher par prenom\n";
         String quitter = "Q - Quitter l'appli";
-        System.out.println(add + list + modify + delete + quitter);
+        System.out.println(add + list + chercherparnom + modify + chercherparprenom + remove + quitter);
     }
     private static void _menu(){
         System.out.println("Choix de l'onglet : ");
@@ -28,7 +35,9 @@ public class App {
             case "1" -> addContact();
             case "2" -> listContact();
             case "3" -> modifyContact();
-            case "4" -> System.out.println("Delete");
+            case "4" -> removeContact();
+            case "5" -> rechercheContactparnom();
+            case "6" -> rechercheContactparprenom();
             case "Q" -> System.out.println("Quitter");
             default -> _menu();
         }
@@ -39,7 +48,7 @@ public class App {
         String mail = _scanner.nextLine();
         try {
             ArrayList<Contact> list = Contact.lister();
-            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts2.csv", true)))) {
+            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)))) {
                 for (Contact contact : list) {
                     if (contact.getMail().equals(mail)) {
                         Contact contactModifier = Contact.modify(contact, mail);
@@ -81,6 +90,85 @@ public class App {
 
             for (Object ma : listNomPrenom) {
                 System.out.println(ma);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void removeContact()  {
+        // récupérer les contacts avec la méthode lister de la class contact
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            System.out.println("Entrer le numéro : ");
+            String numero = _scanner.nextLine();
+            BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+            String line;
+            int numberline = -1;
+            while ( (line = br.readLine()) != null ) {
+                String[] values = line.split(";");
+                numberline = numberline + 1;
+                if(values[3].equals(numero)) {
+                    list.remove(numberline);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(list);
+                  
+                    // stringBuilder.append("list");
+                    try(FileWriter writer = new FileWriter("contacts.csv")){
+                        writer.write(stringBuilder.toString().replace("[", "").replace("]", ",").replace(",", "\n"));
+                    }
+                    break;
+                }
+            }
+            // for (Contact contact : list) {
+            //     System.out.println(contact.getLastname() + " " + contact.getFirstname());
+            // }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void rechercheContactparnom()  {
+        // récupérer les contacts avec la méthode lister de la class contact
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            System.out.println("Entrer le Nom : ");
+            String name = _scanner.nextLine();
+            BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+            String line;
+            int numberline = -1;
+            while ( (line = br.readLine()) != null ) {
+                String[] values = line.split(";");
+                numberline = numberline + 1;
+                if(values[1].toUpperCase().equals(name.toUpperCase())) {
+                    System.out.println("Prénom : " + values[0] + "\nNom : " + values[1] + "\nMail : " + values[2] + "\nNuméro : " + values[3] + "\nDate de naissance : " + values[4]);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void rechercheContactparprenom()  {
+        // récupérer les contacts avec la méthode lister de la class contact
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            System.out.println("Entrer le Prénom : ");
+            String name = _scanner.nextLine();
+            BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+            String line;
+            int numberline = -1;
+            while ( (line = br.readLine()) != null ) {
+                String[] values = line.split(";");
+                numberline = numberline + 1;
+                if(values[0].toUpperCase().equals(name.toUpperCase())) {
+                    System.out.println("Prénom : " + values[0] + "\nNom : " + values[1] + "\nMail : " + values[2] + "\nNuméro : " + values[3] + "\nDate de naissance : " + values[4]);
+                    break;
+                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
