@@ -22,8 +22,10 @@ public class App {
         String add = "A - Ajouter contact\n";
         String list = "L - Liste des contacts\n";
         String remove = "R - remove\n";
+        String chercherparnom = "CPN - Chercher par nom\n";
+        String chercherparprenom = "CPP - Chercher par prenom\n";
         String quitter = "Q - Quitter l'appli";
-        System.out.println(add + list + remove + quitter);
+        System.out.println(add + list + chercherparnom + chercherparprenom + remove + quitter);
     }
     private static void _menu(){
         System.out.println("Choix de l'onglet : ");
@@ -32,6 +34,8 @@ public class App {
             case "A" -> addContact();
             case "L" -> listContact();
             case "R" -> removeContact();
+            case "CPN" -> rechercheContactparnom();
+            case "CPP" -> rechercheContactparprenom();
             case "Q" -> System.out.println("Quitter");
             default -> _menu();
         }
@@ -80,6 +84,52 @@ public class App {
             // for (Contact contact : list) {
             //     System.out.println(contact.getLastname() + " " + contact.getFirstname());
             // }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void rechercheContactparnom()  {
+        // récupérer les contacts avec la méthode lister de la class contact
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            System.out.println("Entrer le Nom : ");
+            String name = _scanner.nextLine();
+            BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+            String line;
+            int numberline = -1;
+            while ( (line = br.readLine()) != null ) {
+                String[] values = line.split(";");
+                numberline = numberline + 1;
+                if(values[1].toUpperCase().equals(name.toUpperCase())) {
+                    System.out.println("Prénom : " + values[0] + "\nNom : " + values[1] + "\nMail : " + values[2] + "\nNuméro : " + values[3] + "\nDate de naissance : " + values[4]);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void rechercheContactparprenom()  {
+        // récupérer les contacts avec la méthode lister de la class contact
+        try {
+            ArrayList<Contact> list = Contact.lister();
+
+            System.out.println("Entrer le Prénom : ");
+            String name = _scanner.nextLine();
+            BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
+            String line;
+            int numberline = -1;
+            while ( (line = br.readLine()) != null ) {
+                String[] values = line.split(";");
+                numberline = numberline + 1;
+                if(values[0].toUpperCase().equals(name.toUpperCase())) {
+                    System.out.println("Prénom : " + values[0] + "\nNom : " + values[1] + "\nMail : " + values[2] + "\nNuméro : " + values[3] + "\nDate de naissance : " + values[4]);
+                    break;
+                }
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
