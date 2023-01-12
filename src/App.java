@@ -220,11 +220,11 @@ public class App {
         Contact contact = new Contact();
         System.out.println("Entrer le nom : ");
         String lastname = _scanner.nextLine();
-        contact.setLastname(lastname);
+        contact.setLastname(lastname.toLowerCase());
 
         System.out.println("Entrer le prénom: ");
         String firstname = _scanner.nextLine();
-        contact.setFirstname(firstname);
+        contact.setFirstname(firstname.toLowerCase());
         while (true){
             try{
                 System.out.println("Entrer le numéro de téléphone : ");
