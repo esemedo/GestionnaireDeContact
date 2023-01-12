@@ -110,14 +110,6 @@ public class App {
                 }
                 break;
             case "2":
-                /*for (Contact contact : listContact) {
-                    //UsFormat.format(contact.getBirthdate() );
-                    Date d = UsFormat.parse(contact.getBirthdate());
-                    UsFormat.applyPattern("yyyy-MM-dd");
-                    String newDate = UsFormat.format(d);
-                    System.out.println(newDate);
-                    contact.setBirthdate(newDate);
-                }*/
                 Collections.sort(listContact, ComparatorByBirth);
                 for (Contact contact : listContact) {
                     System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
@@ -255,7 +247,7 @@ public class App {
         }
         while(true){
             try {
-                System.out.println("Entrer la date de naissance : ");
+                System.out.println("Entrer la date de naissance (format: yyyy-MM-dd) : ");
                 String birthdate = _scanner.nextLine();
                 contact.setBirthdate(birthdate);
                 break;
