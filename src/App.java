@@ -3,9 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 
 import model.Contact ;
@@ -14,42 +14,82 @@ import model.Contact ;
 public class App {
     private static final Scanner _scanner = new Scanner(System.in);
     //private static  Contact contact = new Contact();
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         _AfficheMenu();
         _menu();
     }
     private  static void _AfficheMenu(){
-        String add = "A - Ajouter contact\n";
-        String list = "L - Liste des contacts\n";
-        String remove = "R - remove\n";
-        String chercherparnom = "CPN - Chercher par nom\n";
-        String chercherparprenom = "CPP - Chercher par prenom\n";
+        String add = "1 - Ajouter contact\n";
+        String list = "2 - Liste des contacts\n";
+        String modify = "3 - Modifier un contact\n";
+        String remove = "4 - Supprimer un contact\n";
+        String chercherparnom = "5 - Chercher par nom\n";
+        String chercherparprenom = "6 - Chercher par prenom\n";
         String quitter = "Q - Quitter l'appli";
-        System.out.println(add + list + chercherparnom + chercherparprenom + remove + quitter);
+        System.out.println(add + list + chercherparnom + modify + chercherparprenom + remove + quitter);
     }
     private static void _menu(){
         System.out.println("Choix de l'onglet : ");
         String choiceMenu = _scanner.nextLine();
         switch (choiceMenu) {
-            case "A" -> addContact();
-            case "L" -> listContact();
-            case "R" -> removeContact();
-            case "CPN" -> rechercheContactparnom();
-            case "CPP" -> rechercheContactparprenom();
+            case "1" -> addContact();
+            case "2" -> listContact();
+            case "3" -> modifyContact();
+            case "4" -> removeContact();
+            case "5" -> rechercheContactparnom();
+            case "6" -> rechercheContactparprenom();
             case "Q" -> System.out.println("Quitter");
             default -> _menu();
         }
+    }
+    private static void modifyContact()  {
+        Boolean modify = false;
+        System.out.println("Entrez un email :");
+        String mail = _scanner.nextLine();
+        try {
+            ArrayList<Contact> list = Contact.lister();
+            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)))) {
+                for (Contact contact : list) {
+                    if (contact.getMail().equals(mail)) {
+                        Contact contactModifier = Contact.modify(contact, mail);
+                        modify = true;
+                        pw.println(contactModifier);
+                    } else {
+                        pw.println(contact);
+                    }
 
+                }
+                File realFile = new File("contacts.csv");
+                realFile.delete();
+                new File("contacts2.csv").renameTo(realFile);
 
+            }if (!modify){
+                System.out.println("Contact inexitant\n");
+                _AfficheMenu();
+                _menu();
+            }
+         }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private static List triNom(ArrayList<Contact> list){
+        List listNomPrenom = new ArrayList<>();
+        for (Contact contact : list) {
+            listNomPrenom.add(contact.getLastname() +" "+ contact.getFirstname() +" "+ contact.getMail() +" "+ contact.getTelephone() +" "+ contact.getBirthdate());
+
+        }
+        return listNomPrenom;
     }
 
     private static void listContact()  {
         // récupérer les contacts avec la méthode lister de la class contact
         try {
             ArrayList<Contact> list = Contact.lister();
+            List listNomPrenom = triNom(list);
+            Collections.sort(listNomPrenom);
 
-            for (Contact contact : list) {
-                System.out.println(contact.getLastname() + " " + contact.getFirstname());
+            for (Object ma : listNomPrenom) {
+                System.out.println(ma);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -177,7 +217,6 @@ public class App {
                 System.out.println("Date de naissance invalide");
             }
         }
-        System.out.println(contact.toString());
         try {
             contact.enregistrer();
             System.out.println("Contact enregistré");
