@@ -1,11 +1,8 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Comparator;
 
@@ -14,7 +11,6 @@ import model.Contact ;
 
 public class App {
     private static final Scanner _scanner = new Scanner(System.in);
-    //private static  Contact contact = new Contact();
     public static void main(String[] args)  {
         _AfficheMenu();
         _menu();
@@ -44,33 +40,38 @@ public class App {
         }
     }
     private static void modifyContact()  {
-        Boolean modify = false;
-        System.out.println("Entrez un email :");
-        String mail = _scanner.nextLine();
         try {
+            Boolean contactTrouve = false;
+            System.out.println("Entrez un email :");
+            String mail = _scanner.nextLine();
             ArrayList<Contact> list = Contact.lister();
-            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv")))) {
-                for (Contact contact : list) {
-                    if (contact.getMail().equals(mail)) {
-                        Contact contactModifier = Contact.modify(contact, mail);
-                        modify = true;
-                        pw.println(contactModifier);
-                    } else {
-                        pw.println(contact);
-                    }
-
+            Contact Boncontact = null;
+            for (Contact contact : list) {
+                if (contact.getMail().equals(mail)) {
+                    Boncontact = contact;
+                    System.out.println(Boncontact);
+                    contactTrouve = true;
+                    break;
                 }
-                // File realFile = new File("contacts.csv");
-                // realFile.delete();
-                // new File("contacts2.csv").renameTo(realFile);
-
-            }if (!modify){
-                System.out.println("Contact inexitant\n");
-                _AfficheMenu();
-                _menu();
             }
-         }catch (Exception e) {
+            if (!contactTrouve) {
+                System.out.println("Contact inexitant\n");
+                modifyContact();
+            }
+            Contact contactModifier = Contact.modify(Boncontact, mail);
+            try(FileWriter writer = new FileWriter("contacts.csv")) {
+            for (Contact contact : list){
+                    if(! contact.equals(Boncontact)){
+                        writer.write(contact.toString() + "\n");
+                    }
+                    else {
+                        writer.write(contactModifier.toString()+ "\n");
+                    }
+            }
+            }
+         }catch (ParseException | IOException e) {
             System.out.println("Désolé, ce n'est pas possible actuellement");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -137,8 +138,8 @@ public class App {
     private static void removeContact()  {
         // récupérer les contacts avec la méthode lister de la class contact
         try {
+            Boolean delete = false;
             ArrayList<Contact> list = Contact.lister();
-
             System.out.println("Entrer le numéro : ");
             String numero = _scanner.nextLine();
             BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
@@ -151,17 +152,19 @@ public class App {
                     list.remove(numberline);
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(list);
-                  
                     // stringBuilder.append("list");
                     try(FileWriter writer = new FileWriter("contacts.csv")){
                         writer.write(stringBuilder.toString().replace("[", "").replace("]", ",").replace(",", "\n"));
+                        delete= true;
                     }
                     break;
                 }
             }
-            // for (Contact contact : list) {
-            //     System.out.println(contact.getLastname() + " " + contact.getFirstname());
-            // }
+            if(!delete){
+                System.out.println("Le contact n'est pas dans la liste");
+                removeContact();
+            }
+
         } catch (Exception e) {
             System.out.println("Désolé, ce n'est pas possible actuellement");
         }

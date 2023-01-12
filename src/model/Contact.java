@@ -74,13 +74,6 @@ public class Contact implements Comparable {
     }
 
     public void enregistrer() throws IOException {
-        /*PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)));//demander au PO pk
-        try {
-            pw.println(this.toString());
-        } finally {
-            pw.close();
-
-        }*/
         try (PrintWriter pw2 = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)))) {
             pw2.println(this.toString());
         }
@@ -109,6 +102,8 @@ public class Contact implements Comparable {
     public static Contact modify(Contact contact, String mail) throws ParseException {
                 Scanner _scanner = new Scanner(System.in);
                 ArrayList<String> list = new ArrayList<>();
+
+
                 if (contact.getMail().equals(mail)) {
                     list.add("Que voulez-vous modifier ?");
                     list.add("N - Nom");
@@ -135,23 +130,41 @@ public class Contact implements Comparable {
 
                             break;
                         case "M":
-                            System.out.println("Nouvelle email : ");
-                            String email = _scanner.nextLine();
-                            contact.setMail(email);
+                            try{
+                                System.out.println("Nouvelle email : ");
+                                String email = _scanner.nextLine();
+                                contact.setMail(email);
+                            }
+                            catch (ParseException e){
+                                System.out.println("Email incorrect");
+                                modify(contact,mail);
+                            }
 
                             break;
                         case "T":
-                            System.out.println("Nouveau numéro : ");
-                            String telephone = _scanner.nextLine();
-                            contact.setTelephone(telephone);
+                            try{
+                                System.out.println("Nouveau numéro : ");
+                                String telephone = _scanner.nextLine();
+                                contact.setTelephone(telephone);
+                            }
 
+                            catch (ParseException e){
+                            System.out.println("Numéro incorrect");
+                            modify(contact,mail);
+                        }
                             break;
                         case "D":
-                            System.out.println("Nouvelle date de naissance : ");
-                            String DateBirth = _scanner.nextLine();
-                            contact.setBirthdate(DateBirth);
-
+                            try {
+                                System.out.println("Nouvelle date de naissance : ");
+                                String DateBirth = _scanner.nextLine();
+                                contact.setBirthdate(DateBirth);
+                            }
+                            catch (ParseException e){
+                            System.out.println("Date de naissance incorrect");
+                            modify(contact,mail);
+                            }
                             break;
+
                         default:
                             modify(contact,mail);
                     }
@@ -162,7 +175,7 @@ public class Contact implements Comparable {
 
     @Override
     public String toString() {
-        StringBuilder build = new StringBuilder(); //demander au PO pk
+        StringBuilder build = new StringBuilder();
         build.append(this.getLastname());
         build.append(SEPARATEUR);
         build.append(this.getFirstname());
