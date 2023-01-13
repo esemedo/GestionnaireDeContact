@@ -8,10 +8,20 @@ import java.util.Comparator;
 import model.Contact ;
 
 /**
- * This is the main class of the application.
+ * App est la classe principale.
+ * On y retrouve main et les différentes fonctionnalités principales
  */
 public class App {
+    /**
+    Instanciation de la classe Scanner.
+     Cette classe permet de détecter ce qu'entre l'utilisateur.
+     */
     private static final Scanner _scanner = new Scanner(System.in);
+
+    /**
+     * This is the main class of the application.
+     * @param args tableau de String
+     */
     public static void main(String[] args)  {
         _AfficheMenu();
         _menu();
@@ -93,13 +103,27 @@ public class App {
             System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
-
+    /**
+     * Trie la liste de contact
+     * @throws IOException - quand il y a une erreur en lien avec l'ouverture du fichier, etc.
+     * @throws ParseException - causer par les méthodes setEmail, setTelephone et setBirthdate.
+     * @return list - une liste de contact trier par nom.
+     */
     private static ArrayList triNom() throws IOException, ParseException {
         ArrayList<Contact> list = Contact.lister();
         Collections.sort(list);
         return list;
     }
+
+    /**
+     * Utiliser dans l'appel de la fonction sort de Collections pour comparer selon la date de naissance.
+     * Utilisation de l'interface Comparator et de la fonction comparing.
+     */
     public static Comparator<Contact> ComparatorByBirth = Comparator.comparing(Contact::getBirthdate);
+    /**
+     * Utiliser dans l'appel de la fonction sort de Collections pour comparer selon la date de naissance.
+     * Utilisation de l'interface Comparator et d'une classe anonyme.
+     */
     public static Comparator<Contact> ComparatorByMail = new Comparator<Contact>() {
         public int compare(Contact contact1, Contact contact2) {
             return contact1.getMail().compareTo(contact2.getMail());
@@ -152,11 +176,11 @@ public class App {
             System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
-
+    /**
+     * Supprimer un contact de la liste
+     */
     private static void removeContact()  {
-        /**
-         * Supprimer un contact de la liste
-         */
+
         try {
             Boolean delete = false;
             ArrayList<Contact> list = Contact.lister();
@@ -202,8 +226,11 @@ public class App {
         }
     }
 
+    /**
+     * Recherche les contacts selon le nom.
+     * L'utilisateur entre un nom et on affiche le contact qui y correspond.
+     */
     private static void rechercheContactparnom()  {
-        // récupérer les contacts avec la méthode lister de la class contact
         try {
             ArrayList<Contact> list = Contact.lister();
 
@@ -232,7 +259,10 @@ public class App {
             System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
-
+    /**
+     * Recherche les contacts selon le prénom.
+     * L'utilisateur entre un prénom et on affiche le contact qui y correspond.
+     */
     private static void rechercheContactparprenom()  {
         // récupérer les contacts avec la méthode lister de la class contact
         try {
