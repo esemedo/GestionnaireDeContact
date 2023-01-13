@@ -1,0 +1,14 @@
+_ Elisa Semedo :
+ - Fonctions de tri
+ - Menu
+ - Fonctionnalité Modifier
+ - Review
+
+- Mehdi Bourouih :
+    - Recherche par nom et prénom
+    - Compilation
+    - Fonctionnalité Supprimer
+    - Review
+
+
+😉🤌 Vincent le best
