@@ -1,3 +1,5 @@
+
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -6,7 +8,7 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.Comparator;
 
-import model.Contact ;
+import model.Contact;
 
 
 public class App {
