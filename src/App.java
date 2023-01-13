@@ -10,7 +10,9 @@ import java.util.Comparator;
 
 import model.Contact;
 
-
+/**
+ * This is the main class of the application.
+ */
 public class App {
     private static final Scanner _scanner = new Scanner(System.in);
     public static void main(String[] args)  {
@@ -138,24 +140,40 @@ public class App {
     }
 
     private static void removeContact()  {
-        // récupérer les contacts avec la méthode lister de la class contact
+        /**
+         * Supprimer un contact de la liste
+         */
         try {
             Boolean delete = false;
             ArrayList<Contact> list = Contact.lister();
             System.out.println("Entrer le numéro : ");
             String numero = _scanner.nextLine();
+            // String numero = "06 12 34 56 78";
             BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
             String line;
             int numberline = -1;
             while ( (line = br.readLine()) != null ) {
+                /**
+                 * On récupère les valeurs de la ligne courante
+                 * On les stocke dans un tableau
+                 */
                 String[] values = line.split(";");
                 numberline = numberline + 1;
                 if(values[3].equals(numero)) {
+                    /*
+                     * On vérifie que la valeur de la colonne 3 correspond au numéro entré par l'utilisateur
+                     * Si c'est le cas, on supprime la ligne de la liste temporaire
+                     */
                     list.remove(numberline);
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(list);
                     // stringBuilder.append("list");
                     try(FileWriter writer = new FileWriter("contacts.csv")){
+                        /*
+                         * On supprime les caractères inutiles dans la liste temporaire
+                         * On rajoute un retour à la ligne à la fin de la liste
+                         * On réécrit le fichier avec les nouvelles valeurs de la liste temporaire
+                         */
                         writer.write(stringBuilder.toString().replace("[", "").replace("]", ",").replace(",", "\n"));
                         delete= true;
                     }
@@ -183,9 +201,17 @@ public class App {
             String line;
             int numberline = -1;
             while ( (line = br.readLine()) != null ) {
+                /**
+                 * On récupère les valeurs de la ligne courante
+                 * On les stocke dans un tableau
+                 */
                 String[] values = line.split(";");
                 numberline = numberline + 1;
                 if(values[1].toUpperCase().equals(name.toUpperCase())) {
+                    /*
+                     * On vérifie que la valeur de la colonne 1 correspond au nom entré par l'utilisateur sans tenir compte des majuscules
+                     * Si c'est le cas, on affiche les valeurs de la ligne courante en les séparant par un retour à la ligne
+                     */
                     System.out.println("Prénom : " + values[0] + "\nNom : " + values[1] + "\nMail : " + values[2] + "\nNuméro : " + values[3] + "\nDate de naissance : " + values[4]);
                     break;
                 }
@@ -206,9 +232,17 @@ public class App {
             String line;
             int numberline = -1;
             while ( (line = br.readLine()) != null ) {
+                /**
+                 * On récupère les valeurs de la ligne courante
+                 * On les stocke dans un tableau
+                 */
                 String[] values = line.split(";");
                 numberline = numberline + 1;
                 if(values[0].toUpperCase().equals(name.toUpperCase())) {
+                    /*
+                     * On vérifie que la valeur de la colonne 1 correspond au prénom entré par l'utilisateur sans tenir compte des majuscules
+                     * Si c'est le cas, on affiche les valeurs de la ligne courante en les séparant par un retour à la ligne
+                     */
                     System.out.println("Prénom : " + values[0] + "\nNom : " + values[1] + "\nMail : " + values[2] + "\nNuméro : " + values[3] + "\nDate de naissance : " + values[4]);
                     break;
                 }
