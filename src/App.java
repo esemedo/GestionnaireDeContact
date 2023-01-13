@@ -1,5 +1,3 @@
-
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -7,8 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.Comparator;
-
-import model.Contact;
+import model.Contact ;
 
 /**
  * This is the main class of the application.
@@ -19,6 +16,10 @@ public class App {
         _AfficheMenu();
         _menu();
     }
+    /**
+     * Cette classe permet d'afficher le menu principal de notre gestionnaire.
+     * Elle affiche chaque option possible.
+     */
     private  static void _AfficheMenu(){
         String add = "1 - Ajouter contact\n";
         String list = "2 - Liste des contacts\n";
@@ -29,6 +30,11 @@ public class App {
         String quitter = "Q - Quitter l'appli";
         System.out.println(add + list +  modify + remove +chercherparnom + chercherparprenom +   quitter);
     }
+
+    /**
+     * Permet à l'utilisateur d'entrée en ligne de commande  l'option du menu qu'il a choisi.
+     * Si il ne choisit aucune option, on lui demandera à nouveau son choix.
+     */
     private static void _menu(){
         System.out.println("Choix de l'onglet : ");
         String choiceMenu = _scanner.nextLine();
@@ -43,6 +49,16 @@ public class App {
             default -> _menu();
         }
     }
+
+    /**
+     * Modifie une information du contact.
+     * On demande à l'utilisateur un email qui correspond à celui du contact qu'il souhaite modifier.
+     * Si, il n'existe pas, on affiche un message et on lui propose à nouveau le choix.
+     * On récupère le contact possédant ce mail.
+     * On fait ensuite appel à la méthode modify de la classe Contact pour modifier la valeur du contact qu'on lui a envoyé en paramètre.
+     * Il nous retourne le contact modifier et ensuite on imprime cette modification dans contacts.csv
+     * Si, il y a une erreur, on affichera un message.
+     */
     private static void modifyContact()  {
         try {
             Boolean contactTrouve = false;
@@ -75,18 +91,13 @@ public class App {
             }
          }catch (ParseException | IOException e) {
             System.out.println("Désolé, ce n'est pas possible actuellement");
-            System.out.println(e.getMessage());
         }
     }
 
-    private static List triNom(ArrayList<Contact> list){
-        List listNomPrenom = new ArrayList<>();
-        for (Contact contact : list) {
-            listNomPrenom.add(contact.getLastname() +" "+ contact.getFirstname() +" "+ contact.getMail() +" "+ contact.getTelephone() +" "+ contact.getBirthdate());
-
-        }
-        Collections.sort(listNomPrenom);
-        return listNomPrenom;
+    private static ArrayList triNom() throws IOException, ParseException {
+        ArrayList<Contact> list = Contact.lister();
+        Collections.sort(list);
+        return list;
     }
     public static Comparator<Contact> ComparatorByBirth = Comparator.comparing(Contact::getBirthdate);
     public static Comparator<Contact> ComparatorByMail = new Comparator<Contact>() {
@@ -95,11 +106,14 @@ public class App {
         }
     };
 
-
+    /**
+     * Affiche la liste des contacts.
+     * Si il ne choisit aucune option, on lui demandera à nouveau son choix.
+     */
     private static void listContact()  {
         try {
         ArrayList<Contact> list = Contact.lister();
-        List<Contact> listContact = list;
+        //List<Contact> listContact = list;
         System.out.println("1 - Tri par nom");
         System.out.println("2 - Tri par date de naissance");
         System.out.println("3 - Tri par mail");
@@ -109,24 +123,24 @@ public class App {
         String response = _scanner.nextLine();
         switch (response){
             case "1":
-                List contactList = triNom(list);
+                ArrayList contactList = triNom();
                 for (Object contact : contactList) {
                     System.out.println(contact);
                 }
                 break;
             case "2":
-                Collections.sort(listContact, ComparatorByBirth);
-                for (Contact contact : listContact) {
+                Collections.sort(list, ComparatorByBirth);
+                for (Contact contact : list) {
                     System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
                 }
                 break;
             case "3":
-                Collections.sort(listContact, ComparatorByMail);
-                for (Contact contact : listContact) {System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
+                Collections.sort(list, ComparatorByMail);
+                for (Contact contact : list) {System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
                 }
                 break;
             case "4":
-                for (Contact contact : listContact) {
+                for (Contact contact : list) {
                     System.out.println(contact.getLastname() + " " + contact.getFirstname()+ " " + contact.getMail()+ " " + contact.getTelephone()+ " " + contact.getBirthdate());
                 }
                 break;
@@ -148,7 +162,6 @@ public class App {
             ArrayList<Contact> list = Contact.lister();
             System.out.println("Entrer le numéro : ");
             String numero = _scanner.nextLine();
-            // String numero = "06 12 34 56 78";
             BufferedReader br = new BufferedReader(new FileReader("contacts.csv"));
             String line;
             int numberline = -1;
@@ -167,7 +180,6 @@ public class App {
                     list.remove(numberline);
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(list);
-                    // stringBuilder.append("list");
                     try(FileWriter writer = new FileWriter("contacts.csv")){
                         /*
                          * On supprime les caractères inutiles dans la liste temporaire
@@ -251,16 +263,22 @@ public class App {
             System.out.println("Désolé, ce n'est pas possible actuellement");
         }
     }
-
+    /**
+     * Ajoute un contact dans le fichier contacts.csv.
+     * On propose à l'utilisateur d'entrer le nom, le prénom, le numéro de téléphone, le mail et la date de naissance.
+     * On modifie l'objet Contact avec ses valeurs.
+     * On finit par enregistrer le contact dans un fichier contact.csv
+     * S'il y a un problème, on affiche un message.
+     */
     public static void addContact()  {
         Contact contact = new Contact();
         System.out.println("Entrer le nom : ");
         String lastname = _scanner.nextLine();
-        contact.setLastname(lastname.toLowerCase());
+        contact.setLastname(lastname);
 
         System.out.println("Entrer le prénom: ");
         String firstname = _scanner.nextLine();
-        contact.setFirstname(firstname.toLowerCase());
+        contact.setFirstname(firstname);
         while (true){
             try{
                 System.out.println("Entrer le numéro de téléphone : ");
@@ -271,8 +289,6 @@ public class App {
                 System.out.println("Numéro de téléphone invalide");
             }
         }
-
-
         while (true) {
             try {
                 System.out.println("Entrer le mail : ");

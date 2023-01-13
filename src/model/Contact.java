@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Contact implements Comparable {
+public class Contact implements Comparable<Contact> {
     private String lastname;
     private String firstname;//prenom
     private String mail;
@@ -189,9 +189,9 @@ public class Contact implements Comparable {
     }
 
     @Override
-    public int compareTo(Contact contact) throws Exception {
-        int compareName = this.lastname.compareTo(contact.getLastname());
-        return compareName !=0 ? compareName : this.firstname.compareTo(contact.getFirstname());
+    public int compareTo(Contact contact) throws NullPointerException {
+        int compareName = this.lastname.toLowerCase().compareTo(contact.lastname.toLowerCase());
+        return compareName !=0 ? compareName : this.firstname.toLowerCase().compareTo(contact.firstname.toLowerCase());
     }
 
 
