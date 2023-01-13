@@ -9,35 +9,75 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * La classe Contact posséde les caractéristiques d'un contact et des méthodes pour les modifier/affecter.
+ * Elle implémente l'interface Comparable
+ */
 public class Contact implements Comparable<Contact> {
+    /**
+     * Nom de famille
+     */
     private String lastname;
-    private String firstname;//prenom
+    /**
+     * Prénom
+     */
+    private String firstname;
+    /**
+     * Mail
+     */
     private String mail;
+    /**
+     * Télephone
+     */
     private String telephone;
+    /**
+     * Date de naissance
+     */
     private Date birthdate;
-
+    /**
+     * Point-virgule
+     */
     private static final String SEPARATEUR = ";";
-
+    /**
+     * getter de lastname
+     * @return lastname - nom du contact
+     */
     public String getLastname() {
         return lastname;
     }
-
+    /**
+     * Modifie la valeur du nom de famille.
+     * @param lastname nom sous chaine de caractère
+     */
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-
+    /**
+     * getter de firstname
+     * @return firstname - prénom du contact
+     */
     public String getFirstname() {
         return firstname;
     }
-
+    /**
+     * Modifie la valeur du prénom.
+     * @param firstname prénom de type chaine de caractère
+     */
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
-
+    /**
+     * getter de mail
+     * @return mail - e-mail du contact
+     */
     public String getMail() {
         return mail;
     }
-
+    /**
+     * Modifie la valeur de l'e-mail et vérifie que l'email entré soit correcte.
+     * @param mail e-mail de type chaine de caractère
+     * @throws ParseException  si email incorrecte
+     */
     public void setMail(String mail) throws ParseException {
         Pattern p = Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
@@ -48,11 +88,18 @@ public class Contact implements Comparable<Contact> {
             throw new ParseException("Le format du mail est incorrect.", 0);
         }
     }
-
+    /**
+     * getter de téléphone
+     * @return telephone - numéro du contact
+     */
     public String getTelephone() {
         return telephone;
     }
-
+    /**
+     * Modifie la valeur du numéro de téléphone et vérifie qu'il soit correcte.
+     * @param telephone numéro de type chaine de caractère
+     * @throws ParseException  si numéro incorrecte
+     * */
     public void setTelephone(String telephone) throws ParseException {
         Pattern p = Pattern.compile("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$");
         Matcher m = p.matcher(telephone);
@@ -62,23 +109,39 @@ public class Contact implements Comparable<Contact> {
             throw new ParseException("Le format du numéro est incorrect.", 0);
         }
     }
-
+    /**
+     * getter de birthdate
+     * @return birthdate - date de naissance du contact
+     */
     public String getBirthdate() {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         return f.format(birthdate);
     }
-
+    /**
+     * Parse la String en Date et modifie donc sa valeur.
+     * @param birthdate date de naissance de type chaine de caractère
+     * @throws ParseException  si date incorrecte
+     * */
     public void setBirthdate(String birthdate) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         this.birthdate = format.parse(birthdate);
     }
 
+    /**
+     * Enregistre dans un fichier csv les contacts.
+     * @throws IOException  si il ya un probléme avec l'écriture dans le fichier
+     */
     public void enregistrer() throws IOException {
         try (PrintWriter pw2 = new PrintWriter(new BufferedWriter(new FileWriter("contacts.csv", true)))) {
             pw2.println(this.toString());
         }
     }
-
+    /**
+     * Liste tous les contacts provenant d'un fichier csv s'il y en a.
+     * @return list - ArrayList de Contact
+     * @throws IOException s'il y a un problème avec la lecture du fichier
+     * @throws ParseException causer par les méthodes setEmail, setTelephone et setBirthdate
+     */
     public static ArrayList<Contact> lister() throws  IOException, ParseException {
         ArrayList<Contact> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("contacts.csv"))) {
@@ -98,7 +161,13 @@ public class Contact implements Comparable<Contact> {
         }
         return list;
     }
-
+    /**
+     * Modifie les informations d'un contact
+     * @param contact  instance de la classe contact
+     * @param mail String
+     * @return contact - instance de la classe contact
+     * @throws ParseException causer par les méthodes setEmail, setTelephone et setBirthdate
+     */
     public static Contact modify(Contact contact, String mail) throws ParseException {
                 Scanner _scanner = new Scanner(System.in);
                 ArrayList<String> list = new ArrayList<>();
@@ -173,6 +242,10 @@ public class Contact implements Comparable<Contact> {
 
     }
 
+    /**
+     * Transforme l'objet en String.
+     * @return Chaine de caractères
+     */
     @Override
     public String toString() {
         StringBuilder build = new StringBuilder();
@@ -188,8 +261,15 @@ public class Contact implements Comparable<Contact> {
         return build.toString();
     }
 
+    /**
+     * Fais une comparaison de différents élements, ici le nom et le prénom si égalité,  et retourne un nombre.
+     * Ce nombre peut être soit négatif, soit positif, soit égale à 0.
+     * Cette méthode a pour but d'être utiliser lorsqu'on applique la fonction de trie sort avec l'interface Comparable.
+     * @param contact the object to be compared.
+     * @return number
+     */
     @Override
-    public int compareTo(Contact contact) throws NullPointerException {
+    public int compareTo(Contact contact)  {
         int compareName = this.lastname.toLowerCase().compareTo(contact.lastname.toLowerCase());
         return compareName !=0 ? compareName : this.firstname.toLowerCase().compareTo(contact.firstname.toLowerCase());
     }

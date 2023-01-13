@@ -13,7 +13,7 @@ import model.Contact ;
  */
 public class App {
     /**
-    Instanciation de la classe Scanner.
+    Instance de la classe Scanner.
      Cette classe permet de détecter ce qu'entre l'utilisateur.
      */
     private static final Scanner _scanner = new Scanner(System.in);
